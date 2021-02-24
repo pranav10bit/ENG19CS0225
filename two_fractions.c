@@ -1,35 +1,46 @@
-//WAP to find the sum of two fractions.
-#include <stdio.h>
-#include <math.h>
-struct fractions
-{ int n, d;
-};
+#include<stdio.h>
+typedef struct
+{   int n,d;
+}fraction;
 
-void input(struct fractions *a, struct fractions *b)
-{ puts("Enter the numerator of first fraction:");
-  scanf("%d", &a->n);
-  puts("Enter the denominator of first fraction:");
-  scanf("%d", &a->d);
-  puts("Enter the numerator of second fraction:");
-  scanf("%d", &b->n);
-  puts("Enter the denominator of second fraction:");
-  scanf("%d", &b->d);
+fraction input(int n)
+{   fraction f;
+    printf("Enter the numerator for fraction %d\n",n);
+    scanf("%d",&f.n);
+    printf("Enter the denominator for fraction %d\n",n);
+    scanf("%d",&f.d);
+    return f;
 }
 
-
-int compute(struct fractions *a, struct fractions *b, struct fractions *ans)
-{ ans->n = (a->n*b->d+b->n*b->d);
-  ans->d = a->d*b->d;
+int gcd(int n, int d)
+{
+    int temp;
+    while (n)
+    {   temp=n;
+        n=d%n;
+        d=temp; 
+    }
+    return d;
 }
 
-void output(struct fractions *ans)
-{ printf("The resultant fraction is is %d / %d", ans->n, ans->d);
+fraction compute(fraction ans, fraction f1, fraction f2)
+{   ans.n=(f1.n*f2.d)+(f2.n*f1.d);
+    ans.d=f1.d*f2.d;
+    int g;
+    g = gcd(ans.n,ans.d);
+    ans.n=ans.n/g;
+    ans.d=ans.d/g;
+    return ans;
+}
+
+void output(fraction f1, fraction f2, fraction ans)
+{    printf("The sum of %d/%d and %d/%d is %d/%d\n",f1.n,f1.d,f2.n,f2.d,ans.n,ans.d);
 }
 
 void main()
-{ struct fractions a;
-  struct fractions b, ans;
-  input(&a, &b);
-  compute(&a, &b, &ans);
-  output(&ans);
+{   fraction f1,f2,ans;
+    f1=input(1);
+    f2=input(2);
+    ans=compute(ans,f1,f2);
+    output(f1,f2,ans);
 }
